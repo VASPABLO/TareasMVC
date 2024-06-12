@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using TareasMVC.Servicios;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace TareasMVC
 {
@@ -23,7 +27,7 @@ namespace TareasMVC
             {
                 opciones.Filters.Add(new AuthorizeFilter(politicaUsuarioAutenticados));
 
-            });
+            }).AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
 
             builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
             opciones.UseSqlServer("name=DefaultConnection"));
@@ -41,9 +45,27 @@ namespace TareasMVC
                 opciones.LoginPath = "/usuarios/login";
                 opciones.AccessDeniedPath = "/usuarios/login";
             });
+            // Configuracion de Servicio para usar otro idioma
+            builder.Services.AddLocalization(opciones =>
+            {
+                opciones.ResourcesPath = "Recursos";
+            });
+            //Fin de la configuracion
+
+
 
             var app = builder.Build();
 
+            //Definir los idiomas
+
+            var culturasUISoportadas = new[] { "es", "en" };
+
+            app.UseRequestLocalization(opciones =>
+            {
+                opciones.DefaultRequestCulture = new RequestCulture("es");
+                opciones.SupportedUICultures = culturasUISoportadas
+                .Select(cultura => new CultureInfo(cultura)).ToList();
+            });
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
