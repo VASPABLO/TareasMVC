@@ -27,7 +27,12 @@ namespace TareasMVC
             {
                 opciones.Filters.Add(new AuthorizeFilter(politicaUsuarioAutenticados));
 
-            }).AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+            }).AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+            .AddDataAnnotationsLocalization(opciones =>
+            {
+                opciones.DataAnnotationLocalizerProvider = (_, factoria) =>
+                    factoria.Create(typeof(RecursoCompartido));  
+            });
 
             builder.Services.AddDbContext<ApplicationDbContext>(opciones =>
             opciones.UseSqlServer("name=DefaultConnection"));
@@ -52,19 +57,15 @@ namespace TareasMVC
             });
             //Fin de la configuracion
 
-
-
             var app = builder.Build();
 
             //Definir los idiomas
 
-            var culturasUISoportadas = new[] { "es", "en" };
-
             app.UseRequestLocalization(opciones =>
             {
                 opciones.DefaultRequestCulture = new RequestCulture("es");
-                opciones.SupportedUICultures = culturasUISoportadas
-                .Select(cultura => new CultureInfo(cultura)).ToList();
+                opciones.SupportedUICultures = Constantes.CulturasUISoportadas 
+                .Select(cultura => new CultureInfo(cultura.Value)).ToList();
             });
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

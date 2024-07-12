@@ -6,13 +6,18 @@
 
 <div class="text-center">
     <h1 class="display-4">@localizer["Bienvenido"]</h1>
-      <p>@localizer["Aprende acerca de <a href=\"https://docs.microsoft.com/aspnet/core\">construir aplicaciones wed con ASP.Net Core</a>"]</p>
+      <p>@localizer["Aprende más"]</p>
 </div>
-<!--Saludo en otro idioma, 
-    comfiguramos el serbicio, agregamos en el controlador el IStringLocalizer, agregamos
-    en la vista index el ViewBag y mostramos en la vista
--->
+
 <div class="text-center">
     <h3>@ViewBag.Saludo, Pablo</h3>
    
 </div>
+
+<button onclick="mostrarError()">
+    Mostrar Error
+    </button>
+
+    @section Scripts{
+    <script src="~/js/utilidades.js"></script>
+    }
