@@ -22,7 +22,7 @@ namespace TareasMVC.Controllers
         //Agregamos a la vista el ViewBag para usar otros idiomas.
         public IActionResult Index()
         {
-            ViewBag.Saludo = localizer["Buenos dias"];
+          
             return View();
         }
         [HttpPost]
